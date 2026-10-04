@@ -2,161 +2,163 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import {
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import ProductImage from "@/components/product/ProductImage";
 import CircleButton from "@/components/ui/CircleButton";
+import { gsap } from "@/lib/gsap";
 import { SHOP_ALL } from "@/lib/products";
 
 /**
- * "Our Products" — a horizontal rail of arch cards that travels right to left
- * as you scroll past the section, and that you can also grab and drag
- * sideways.
+ * "Upcoming Products" — a rail that travels right to left continuously, on its
+ * own, and that you can grab and throw.
  *
- * Both inputs feed one offset: scroll progress maps to a base translation, and
- * dragging adds to it. The sum runs through a spring so a flick settles
- * smoothly instead of stopping dead, and so scroll and drag never fight.
+ * The product set is repeated enough times to overflow the viewport, and the
+ * offset wraps on the width of a single set, so the loop is seamless and there
+ * is no snap at the end. Dragging adds to the same offset; on release the
+ * drift carries on from wherever you left it, keeping any throw velocity.
  */
+const REPEATS = 8;
+
 export default function ProductRail() {
-  const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const [travel, setTravel] = useState(0);
+  const setRef = useRef<HTMLDivElement>(null);
+  const offset = useRef(0);
+  const setWidth = useRef(0);
+  const velocity = useRef(0);
+  const drag = useRef({ active: false, lastX: 0, moved: 0 });
+  const [grabbing, setGrabbing] = useState(false);
   const prefersReduced = useReducedMotion();
 
-  const drag = useMotionValue(0);
-  const dragState = useRef({ active: false, startX: 0, startValue: 0 });
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-
-  // Scroll drives the base sweep; the spring keeps drag and scroll blended.
-  const scrollX = useTransform(scrollYProgress, [0, 1], [0, -1]);
-  const combined = useMotionValue(0);
-  const x = useSpring(combined, {
-    stiffness: 140,
-    damping: 26,
-    mass: 0.5,
-    restDelta: 0.2,
-  });
-
-  const recompute = () => {
-    const track = trackRef.current;
-    const section = sectionRef.current;
-    if (!track || !section) return;
-    // How far the track must move for its last card to reach the left edge.
-    setTravel(Math.max(0, track.scrollWidth - section.clientWidth + 48));
-  };
-
   useEffect(() => {
-    recompute();
-    const ro = new ResizeObserver(recompute);
-    if (trackRef.current) ro.observe(trackRef.current);
-    window.addEventListener("resize", recompute);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", recompute);
+    const track = trackRef.current;
+    const set = setRef.current;
+    if (!track || !set) return;
+
+    const paint = () => {
+      const w = setWidth.current;
+      if (w) track.style.transform = `translate3d(${offset.current - w}px, 0, 0)`;
     };
-  }, []);
+    const measure = () => {
+      setWidth.current = set.offsetWidth;
+      paint();
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(set);
 
-  const sync = () => {
-    const base = scrollX.get() * travel;
-    const next = base + drag.get();
-    // Never let the rail pull past either end.
-    combined.set(Math.min(0, Math.max(-travel, next)));
-  };
+    const SPEED = 42; // px per second, right to left
 
-  useMotionValueEvent(scrollX, "change", sync);
-  useMotionValueEvent(drag, "change", sync);
-  useEffect(sync, [travel]); // eslint-disable-line react-hooks/exhaustive-deps
+    const tick = (_t: number, delta: number) => {
+      const w = setWidth.current;
+      if (!w) return;
+
+      if (!drag.current.active) {
+        // Constant drift, plus whatever throw velocity is still decaying.
+        offset.current -= (SPEED * delta) / 1000;
+        offset.current += velocity.current * (delta / 1000);
+        velocity.current *= 0.94;
+        if (Math.abs(velocity.current) < 1) velocity.current = 0;
+      }
+
+      // Wrap on one set width so the loop never reaches an edge.
+      offset.current = ((offset.current % w) + w) % w;
+      track.style.transform = `translate3d(${offset.current - w}px, 0, 0)`;
+    };
+
+    if (prefersReduced) {
+      track.style.transform = "translate3d(0, 0, 0)";
+      return () => ro.disconnect();
+    }
+
+    gsap.ticker.add(tick);
+    return () => {
+      gsap.ticker.remove(tick);
+      ro.disconnect();
+    };
+  }, [prefersReduced]);
 
   /* ---------------------------------------------------------------- drag */
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (prefersReduced) return;
-    dragState.current = {
-      active: true,
-      startX: e.clientX,
-      startValue: drag.get(),
-    };
+    drag.current = { active: true, lastX: e.clientX, moved: 0 };
+    velocity.current = 0;
+    setGrabbing(true);
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
-    const s = dragState.current;
-    if (!s.active) return;
-    drag.set(s.startValue + (e.clientX - s.startX) * 1.15);
+    const d = drag.current;
+    if (!d.active) return;
+    const dx = e.clientX - d.lastX;
+    d.lastX = e.clientX;
+    d.moved += Math.abs(dx);
+    offset.current += dx;
+    // Remember the throw so releasing carries momentum.
+    velocity.current = dx * 55;
   };
 
   const endDrag = (e: React.PointerEvent) => {
-    if (!dragState.current.active) return;
-    dragState.current.active = false;
+    if (!drag.current.active) return;
+    drag.current.active = false;
+    setGrabbing(false);
     (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
-    // Clamp the stored drag so it cannot accumulate beyond the usable range.
-    const base = scrollX.get() * travel;
-    drag.set(Math.min(-base, Math.max(-travel - base, drag.get())));
   };
 
+  const sets = Array.from({ length: REPEATS });
+
   return (
-    <section
-      ref={sectionRef}
-      className="relative h-[240vh] bg-rose"
-      aria-label="Our products"
-    >
-      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
-        <h2 className="pointer-events-none select-none text-center font-serif text-[clamp(2.6rem,8vw,6rem)] font-normal leading-none tracking-tight text-ink">
-          Our Products
-        </h2>
+    <section className="overflow-hidden bg-rose py-16 lg:py-24">
+      <h2 className="pointer-events-none select-none text-center font-serif text-[clamp(2.4rem,7vw,5rem)] leading-none tracking-tight text-ink">
+        Upcoming Products
+      </h2>
 
-        <div
-          className="mt-8 cursor-grab touch-pan-y active:cursor-grabbing"
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerCancel={endDrag}
-        >
-          <motion.div
-            ref={trackRef}
-            style={{ x }}
-            className="flex w-max gap-4 px-6 will-change-transform"
-          >
-            {SHOP_ALL.map((p) => (
-              <Link
-                key={p.handle}
-                href={`/products/${p.handle}`}
-                draggable={false}
-                onClick={(e) => {
-                  // A drag that moved should not also open the product.
-                  if (dragState.current.active) e.preventDefault();
-                }}
-                className="group block w-[230px] shrink-0 select-none rounded-t-full bg-paper pb-6 pt-10 transition-colors hover:bg-white sm:w-[270px]"
-              >
-                <ProductImage
-                  product={p}
-                  className="mx-auto h-60 w-full px-10 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105"
-                />
-                <div className="px-6 pt-4 text-center">
-                  <p className="text-[13px] font-medium">{p.name}</p>
-                  <p className="mt-0.5 text-[12px] text-ink-muted">
-                    ${p.price}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </motion.div>
+      <div
+        className={`mt-12 touch-pan-y ${grabbing ? "cursor-grabbing" : "cursor-grab"}`}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+      >
+        <div ref={trackRef} className="flex w-max will-change-transform">
+          {sets.map((_, s) => (
+            <div
+              key={s}
+              ref={s === 0 ? setRef : undefined}
+              className="flex gap-4 pr-4"
+              aria-hidden={s > 0}
+            >
+              {SHOP_ALL.map((p) => (
+                <Link
+                  key={`${s}-${p.handle}`}
+                  href={`/products/${p.handle}`}
+                  draggable={false}
+                  tabIndex={s > 0 ? -1 : undefined}
+                  onClick={(e) => {
+                    // A grab that travelled is a drag, not a click.
+                    if (drag.current.moved > 6) e.preventDefault();
+                  }}
+                  className="group block w-[240px] shrink-0 select-none rounded-t-full bg-paper pb-7 pt-10 transition-colors hover:bg-white sm:w-[280px]"
+                >
+                  <ProductImage
+                    product={p}
+                    className="mx-auto h-60 w-full px-10 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105"
+                  />
+                  <div className="px-6 pt-5 text-center">
+                    <p className="text-[14px] font-medium">{p.name}</p>
+                    <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                      Coming soon
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ))}
         </div>
+      </div>
 
-        <div className="mt-10 flex justify-center">
-          <CircleButton href="/collections/all" label="View all" />
-        </div>
+      <div className="mt-12 flex justify-center">
+        <CircleButton href="/collections/all" label="View all" />
       </div>
     </section>
   );

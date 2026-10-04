@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ProductImage from "@/components/product/ProductImage";
-import { COLLECTIONS, productsIn } from "@/lib/products";
+import { COLLECTIONS, SHOP_ALL, productsIn } from "@/lib/products";
 
 /**
  * Horizontal strip of shop entry points, mirroring the reference's icon rail —
@@ -22,9 +22,12 @@ export default function CollectionStrip() {
       <div className="u-scroll-x">
         <ul className="mx-auto flex w-max gap-7 px-6 lg:px-10">
           {items.map((item, i) => {
-            const sample = i === 0 ? null : productsIn(
-              COLLECTIONS[i - 1].handle,
-            )[0];
+            // Lines without their own SKU yet still need a tile, so fall back
+            // to the range's lead product rather than rendering an empty box.
+            const sample =
+              i === 0
+                ? null
+                : (productsIn(COLLECTIONS[i - 1].handle)[0] ?? SHOP_ALL[0]);
             return (
               <li key={item.href} className="w-[104px] shrink-0">
                 <Link href={item.href} className="group block text-center">

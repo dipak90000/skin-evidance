@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ProductImage from "@/components/product/ProductImage";
-import { COLLECTIONS, productsIn } from "@/lib/products";
+import { COLLECTIONS, SHOP_ALL, productsIn } from "@/lib/products";
 
 /**
  * The reference's collection row: a lead card carrying the claim and a VIEW ALL
@@ -8,7 +8,10 @@ import { COLLECTIONS, productsIn } from "@/lib/products";
  * a tinted shelf.
  */
 export default function CollectionCards() {
-  const cards = COLLECTIONS.slice(0, 3);
+  // Lines that already have a product lead; the rest follow.
+  const cards = [...COLLECTIONS]
+    .sort((a, b) => productsIn(b.handle).length - productsIn(a.handle).length)
+    .slice(0, 3);
 
   return (
     <section className="bg-paper py-16 lg:py-24">
@@ -33,7 +36,8 @@ export default function CollectionCards() {
 
           {/* One card per line */}
           {cards.map((c) => {
-            const items = productsIn(c.handle).slice(0, 3);
+            const own = productsIn(c.handle);
+            const items = own.length > 0 ? own.slice(0, 3) : [SHOP_ALL[0]];
             return (
               <div
                 key={c.handle}

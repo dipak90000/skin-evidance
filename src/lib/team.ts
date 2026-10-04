@@ -5,6 +5,8 @@
  * addresses are deliberately left out — public pages get brand contact routes
  * instead. Add them only with the person's explicit consent.
  */
+export const CONTACT_EMAIL = "admin@theskinevidence.com";
+
 export const LEAD_SCIENTIST = {
   name: "Naresh Pagi",
   role: "Research Scientist Manager — Cosmetic R&D",
@@ -36,32 +38,8 @@ export const LEAD_SCIENTIST = {
     "MFR & batch documentation",
     "Claim substantiation",
   ],
-  career: [
-    {
-      org: "KLM Laboratories Pvt. Ltd.",
-      role: "Research Scientist Manager",
-      period: "2026 — present",
-      note: "Cosmetic and healthcare product development across 30+ countries. Leads doctor-prescribed cosmetic development end to end.",
-    },
-    {
-      org: "Cosmetics Concepts Research Pvt Ltd",
-      role: "R&D Manager",
-      period: "2025 — 2026",
-      note: "Ran development from literature research through stability, scale-up and commercial production.",
-    },
-    {
-      org: "Asclepius Wellness Pvt Ltd",
-      role: "R&D Manager",
-      period: "2025",
-      note: "AYUSH-approved product development, R&D lab setup and quality standards.",
-    },
-    {
-      org: "Azafran Innovation Ltd",
-      role: "R&D Officer & Cosmetic Chemist",
-      period: "2018 — 2023",
-      note: "Built skincare and personal care formulations from concept to market.",
-    },
-  ],
+  experienceSummary:
+    "8+ years in cosmetic R&D across multiple organisations, from lab-scale formulation through to commercial production.",
   brands: [
     "Lupin India (baby care)",
     "Reliance Cosmetics",

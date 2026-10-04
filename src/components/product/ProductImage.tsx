@@ -21,11 +21,15 @@ import type { Product } from "@/lib/products";
 const BOTTLES = {
   dropper: {
     src: "/products/serum.webp",
+    w: 728,
+    h: 1200,
     nameStrip: { x: 23, y: 67.5, w: 57, h: 18 },
     tilt: -1.5,
   },
   tall: {
     src: "/products/bottle.webp",
+    w: 686,
+    h: 1200,
     nameStrip: { x: 9, y: 66, w: 68, h: 18 },
     tilt: 1,
   },
@@ -51,20 +55,25 @@ export default function ProductImage({
   const s = bottle.nameStrip;
 
   return (
-    <div
-      className={`relative ${className}`}
-      style={{ containerType: "inline-size" }}
-    >
-      <img
-        src={bottle.src}
-        alt={`${product.name} bottle`}
-        className="h-full w-full object-contain"
-        draggable={false}
-      />
+    <div className={`flex items-center justify-center ${className}`}>
+      {/* The overlay is positioned in percentages of the bottle, so the box it
+          sits in has to be the bottle's own aspect ratio. Letting the image
+          letterbox inside a differently-shaped container would slide the label
+          off the glass. */}
+      <div
+        className="relative h-full"
+        style={{ aspectRatio: `${bottle.w} / ${bottle.h}`, maxWidth: "100%" }}
+      >
+        <img
+          src={bottle.src}
+          alt={`${product.name} bottle`}
+          className="absolute inset-0 h-full w-full object-contain"
+          draggable={false}
+        />
 
-      {showLabel && (
-        <div
-          className="pointer-events-none absolute flex flex-col items-center justify-center overflow-hidden text-center"
+        {showLabel && (
+          <div
+            className="pointer-events-none absolute flex flex-col items-center justify-center overflow-hidden text-center"
           style={{
             left: `${s.x}%`,
             top: `${s.y}%`,
@@ -72,13 +81,14 @@ export default function ProductImage({
             height: `${s.h}%`,
             backgroundColor: LABEL_INK,
             transform: `rotate(${bottle.tilt}deg)`,
+            containerType: "inline-size",
           }}
         >
           <span
             className="block w-full px-[6%] font-medium uppercase leading-[1.2] text-[#1d1a16]"
             style={{
-              fontSize: "clamp(4px, 2.6cqw, 15px)",
-              letterSpacing: "0.03em",
+              fontSize: "clamp(5px, 11cqw, 17px)",
+              letterSpacing: "0.02em",
             }}
           >
             {product.name}
@@ -86,14 +96,15 @@ export default function ProductImage({
           <span
             className="mt-[0.3em] block w-full uppercase leading-none text-[#55504a]"
             style={{
-              fontSize: "clamp(3px, 1.5cqw, 9px)",
-              letterSpacing: "0.14em",
+              fontSize: "clamp(3px, 6cqw, 10px)",
+              letterSpacing: "0.12em",
             }}
           >
             {product.size}
           </span>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

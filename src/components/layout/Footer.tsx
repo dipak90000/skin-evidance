@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { COLLECTIONS } from "@/lib/products";
 import { SITE } from "@/lib/site";
+import { CONTACT_EMAIL } from "@/lib/team";
 
 export default function Footer() {
   return (
@@ -11,6 +12,12 @@ export default function Footer() {
           <p className="mt-3 max-w-sm text-[13px] text-ink-muted">
             Subscribe for new arrivals, offers and formulation notes.
           </p>
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="mt-4 inline-block text-[14px] underline-offset-4 hover:underline"
+          >
+            {CONTACT_EMAIL}
+          </a>
           <form className="mt-5 flex max-w-sm border-b border-ink">
             <input
               type="email"

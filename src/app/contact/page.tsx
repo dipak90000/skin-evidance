@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ConsultationForm from "@/components/contact/ConsultationForm";
 import ScientistProfile from "@/components/contact/ScientistProfile";
+import { CONTACT_EMAIL } from "@/lib/team";
 
 export const metadata: Metadata = {
   title: "Get in Touch — Skin Evidance",
@@ -31,6 +32,12 @@ export default function ContactPage() {
             Tell us what you are working on. Formulation questions go straight
             to our R&amp;D lead rather than a support queue.
           </p>
+          <a
+            href={`mailto:${CONTACT_EMAIL}`}
+            className="mt-6 inline-block font-serif text-[clamp(1.3rem,3vw,2rem)] underline-offset-[6px] transition-colors hover:text-paper/70 hover:underline"
+          >
+            {CONTACT_EMAIL}
+          </a>
         </header>
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">

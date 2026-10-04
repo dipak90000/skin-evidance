@@ -1,12 +1,10 @@
 /* eslint-disable @next/next/no-img-element --
    One fixed 640x640 portrait, already optimised and sized. */
 
-import { LEAD_SCIENTIST as S } from "@/lib/team";
+import { CONTACT_EMAIL, LEAD_SCIENTIST as S } from "@/lib/team";
 
 /** Who actually formulates the products, shown beside the enquiry form. */
 export default function ScientistProfile() {
-  const years = new Date().getFullYear() - S.since;
-
   return (
     <aside className="lg:sticky lg:top-24 lg:self-start">
       <div className="flex flex-col items-center text-center">
@@ -37,9 +35,7 @@ export default function ScientistProfile() {
           <dt className="text-[11px] uppercase tracking-[0.1em] text-paper/50">
             Years in R&amp;D
           </dt>
-          <dd className="mt-1 font-serif text-[1.7rem] leading-none">
-            {years}+
-          </dd>
+          <dd className="mt-1 font-serif text-[1.7rem] leading-none">8+</dd>
         </div>
       </dl>
 
@@ -73,18 +69,19 @@ export default function ScientistProfile() {
 
       <section className="mt-8">
         <h3 className="u-label text-[11px] text-paper/50">Experience</h3>
-        <ol className="mt-4 space-y-5">
-          {S.career.map((job) => (
-            <li key={job.org} className="border-l border-paper/20 pl-4">
-              <p className="text-[11px] text-paper/50">{job.period}</p>
-              <p className="mt-1 text-[14px]">{job.role}</p>
-              <p className="text-[13px] text-paper/70">{job.org}</p>
-              <p className="mt-1.5 text-[12px] leading-relaxed text-paper/50">
-                {job.note}
-              </p>
-            </li>
-          ))}
-        </ol>
+        <p className="mt-3 text-[13px] leading-relaxed text-paper/70">
+          {S.experienceSummary}
+        </p>
+      </section>
+
+      <section className="mt-8 border-t border-paper/15 pt-6">
+        <h3 className="u-label text-[11px] text-paper/50">Email us</h3>
+        <a
+          href={`mailto:${CONTACT_EMAIL}`}
+          className="mt-2 block font-serif text-[1.35rem] underline-offset-4 hover:underline"
+        >
+          {CONTACT_EMAIL}
+        </a>
       </section>
 
       <section className="mt-8">
