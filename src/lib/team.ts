@@ -9,7 +9,7 @@ export const CONTACT_EMAIL = "admin@theskinevidence.com";
 
 export const LEAD_SCIENTIST = {
   name: "Naresh Pagi",
-  role: "Research Scientist Manager — Cosmetic R&D",
+  role: "Research Scientist — Cosmetic R&D",
   photo: "/team/naresh-pagi.webp",
   location: "Vadodara, Gujarat, India",
   since: 2018,
