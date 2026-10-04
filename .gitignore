@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Source material, not site assets — 48MB of screen recordings and renders
+# that nothing in the build references. Kept on disk, out of history.
+/public/my assets/
+/public/reference/
