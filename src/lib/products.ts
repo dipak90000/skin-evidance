@@ -185,55 +185,50 @@ PRODUCTS.forEach((p) => {
   if (!p.clinical) p.clinical = { ...DEFAULT_CLINICAL };
 });
 
-export type Review = {
+export type WaitlistNote = {
   name: string;
   location: string;
-  rating: number;
-  title: string;
   body: string;
-  product: string;
+  waitingFor: string;
 };
 
-export const REVIEWS: Review[] = [
+/**
+ * Early interest from the waitlist.
+ *
+ * Nothing has shipped yet, so these are people waiting rather than customers
+ * reviewing — no star ratings and no efficacy claims, because there are no
+ * results to report. Replace with real messages before launch.
+ */
+export const WAITLIST_NOTES: WaitlistNote[] = [
   {
     name: "Priya M.",
-    location: "Mumbai, IN",
-    rating: 5,
-    title: "Finally something that lists the percentages",
-    body: "I have bought a lot of vitamin C that never said how much was in it. Eight weeks in and the marks on my cheeks have genuinely faded.",
-    product: "Deep Vita C Serum",
+    location: "Mumbai",
+    body: "I have been through every vitamin C on the shelf and none of them say how much is actually in the bottle. The fact that you publish the percentage is why I signed up.",
+    waitingFor: "Dark Spot Serum",
   },
   {
     name: "Hannah L.",
-    location: "Leeds, UK",
-    rating: 5,
-    title: "My pores actually look smaller",
-    body: "I was sceptical because everything claims this. Started twice a week like the instructions say, now nightly. No irritation at all.",
-    product: "Zero Pore Serum",
-  },
-  {
-    name: "Daniel R.",
-    location: "Austin, US",
-    rating: 4,
-    title: "Great texture, takes patience",
-    body: "The retinal is strong — I went too fast at first. Slowed down and it has been excellent. Wish the jar were bigger.",
-    product: "Deep Retinal Cream",
-  },
-  {
-    name: "Sofia K.",
-    location: "Berlin, DE",
-    rating: 5,
-    title: "The one I repurchase",
-    body: "Light enough under makeup, and my skin does not feel tight by midday any more. Third bottle.",
-    product: "Glow Collagen Serum",
+    location: "Leeds",
+    body: "Found you through the formulator's background rather than an ad, which is a first. Waiting on the acne range — please tell me the week it lands.",
+    waitingFor: "Anti-Acne Range",
   },
   {
     name: "Aisha N.",
-    location: "Toronto, CA",
-    rating: 5,
-    title: "Calmed everything down",
-    body: "Used it through a bad breakout month. It did not sting and the redness settled faster than anything else I have tried.",
-    product: "Clear Cica Gel",
+    location: "Toronto",
+    body: "A sunscreen with no white cast that is genuinely SPF 50 is the thing I have been hunting for years. Already on the list for launch day.",
+    waitingFor: "Sunscreen SPF 50",
+  },
+  {
+    name: "Sofia K.",
+    location: "Berlin",
+    body: "I like that you are not pretending to have twenty products. Two done properly beats a full shelf of filler. Counting down.",
+    waitingFor: "Body Wash",
+  },
+  {
+    name: "Daniel R.",
+    location: "Austin",
+    body: "Signed up the moment I read the ingredient lists. If the night cream does what the page describes, I am switching everything over.",
+    waitingFor: "Spot-Correcting Night Cream",
   },
 ];
 
