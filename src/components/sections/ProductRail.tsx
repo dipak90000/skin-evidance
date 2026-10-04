@@ -11,7 +11,8 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import ProductArt from "@/components/product/ProductArt";
+import ProductImage from "@/components/product/ProductImage";
+import CircleButton from "@/components/ui/CircleButton";
 import { SHOP_ALL } from "@/lib/products";
 
 /**
@@ -107,7 +108,7 @@ export default function ProductRail() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[240vh] bg-[#e8cfc9]"
+      className="relative h-[240vh] bg-rose"
       aria-label="Our products"
     >
       <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
@@ -136,13 +137,11 @@ export default function ProductRail() {
                   // A drag that moved should not also open the product.
                   if (dragState.current.active) e.preventDefault();
                 }}
-                className="group block w-[230px] shrink-0 select-none rounded-t-full bg-[#fdfaf4] pb-6 pt-10 transition-colors hover:bg-white sm:w-[270px]"
+                className="group block w-[230px] shrink-0 select-none rounded-t-full bg-paper pb-6 pt-10 transition-colors hover:bg-white sm:w-[270px]"
               >
-                <ProductArt
-                  form={p.form}
-                  tint={p.tint}
-                  sub={p.size}
-                  className="mx-auto h-56 w-full transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105"
+                <ProductImage
+                  product={p}
+                  className="mx-auto h-60 w-full px-10 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105"
                 />
                 <div className="px-6 pt-4 text-center">
                   <p className="text-[13px] font-medium">{p.name}</p>
@@ -156,23 +155,7 @@ export default function ProductRail() {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <Link
-            href="/collections/all"
-            className="group inline-flex items-center gap-3"
-          >
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-ink text-white transition-transform duration-300 group-hover:translate-x-1">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                className="h-4 w-4"
-              >
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </span>
-            <span className="text-[15px]">View all</span>
-          </Link>
+          <CircleButton href="/collections/all" label="View all" />
         </div>
       </div>
     </section>

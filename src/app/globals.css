@@ -12,18 +12,23 @@
   --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
   --font-serif: var(--font-garamond), "EB Garamond", Georgia, serif;
 
-  /* Palette */
-  --color-ink: #121212;
-  --color-ink-muted: #6b6b6b;
-  --color-ink-faint: #a0a0a0;
-  --color-paper: #ffffff;
-  --color-paper-alt: #f6f6f6;
-  --color-line: #e5e5e5;
+  /* Palette — matched to the bryhel reference */
+  --color-ink: #1a1714;
+  --color-ink-muted: #6d665f;
+  --color-ink-faint: #a09890;
+  --color-paper: #fdfaf0;        /* warm cream page */
+  --color-paper-alt: #f4f0e4;    /* card cream */
+  --color-line: #ded8c9;
 
-  /* Accent — the magenta used on CTAs and sale prices */
-  --color-accent: #d6006e;
-  --color-accent-dark: #a80057;
-  --color-sale: #d6006e;
+  /* Section grounds */
+  --color-charcoal: #26221f;     /* nav bar + dark blocks */
+  --color-sand: #c9c7bb;         /* hero ground */
+  --color-rose: #e8cfc9;         /* product rail ground */
+
+  /* Accent */
+  --color-accent: #8a5a3c;
+  --color-accent-dark: #6d4529;
+  --color-sale: #8a5a3c;
 
   /* Layout */
   --spacing-page: 120rem; /* 1200px content width */
@@ -103,4 +108,9 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ProductArt from "@/components/product/ProductArt";
+import ProductImage from "@/components/product/ProductImage";
 import { COLLECTIONS, productsIn } from "@/lib/products";
 
 /**
@@ -30,10 +30,9 @@ export default function CollectionStrip() {
                 <Link href={item.href} className="group block text-center">
                   <div className="grid h-[104px] w-[104px] place-items-center rounded-2xl bg-paper-alt transition-colors duration-300 group-hover:bg-[#ececec]">
                     {sample ? (
-                      <ProductArt
-                        form={sample.form}
-                        tint={item.tint}
-                        label=""
+                      <ProductImage
+                        product={sample}
+                        showLabel={false}
                         className="h-[82px] w-[82px] transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-110"
                       />
                     ) : (

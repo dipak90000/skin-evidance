@@ -2,6 +2,7 @@ import SkincareScrollExperience from "@/components/hero/SkincareScrollExperience
 import CollectionStrip from "@/components/sections/CollectionStrip";
 import CollectionCards from "@/components/sections/CollectionCards";
 import ProductRail from "@/components/sections/ProductRail";
+import Reviews from "@/components/sections/Reviews";
 import ProductCard from "@/components/product/ProductCard";
 import { SHOP_ALL } from "@/lib/products";
 
@@ -32,6 +33,7 @@ export default function Home() {
       </section>
 
       <CollectionCards />
+      <Reviews />
       <ProductRail />
     </main>
   );

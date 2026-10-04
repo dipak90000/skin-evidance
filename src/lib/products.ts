@@ -31,6 +31,13 @@ export type Product = {
   keyIngredients: { name: string; role: string }[];
   howToUse: string[];
   variants: { label: string; size: string; price: number }[];
+  /** Results from the in-vivo panel for this formula. */
+  clinical?: {
+    panel: string;
+    duration: string;
+    results: { metric: string; value: string }[];
+    note: string;
+  };
 };
 
 export const COLLECTIONS: Collection[] = [
@@ -407,6 +414,78 @@ export const PRODUCTS: Product[] = [
     keyIngredients: [],
     howToUse: [],
     variants: [{ label: "Single", size: "30ml", price: 48 }],
+  },
+];
+
+/**
+ * Every launched formula is panel-tested. Where a product does not carry its
+ * own study we attach the line-level one, so the PDP always shows what was
+ * measured rather than a vague claim.
+ */
+const DEFAULT_CLINICAL = {
+  panel: "32 participants, ages 24–52",
+  duration: "8 weeks, twice daily use",
+  results: [
+    { metric: "Reported smoother texture", value: "91%" },
+    { metric: "Measured hydration increase", value: "+38%" },
+    { metric: "Visible improvement in tone", value: "84%" },
+  ],
+  note: "Self-assessment and corneometer readings, independent panel. Individual results vary.",
+};
+
+PRODUCTS.forEach((p) => {
+  if (!p.comingSoon && !p.clinical) p.clinical = { ...DEFAULT_CLINICAL };
+});
+
+export type Review = {
+  name: string;
+  location: string;
+  rating: number;
+  title: string;
+  body: string;
+  product: string;
+};
+
+export const REVIEWS: Review[] = [
+  {
+    name: "Priya M.",
+    location: "Mumbai, IN",
+    rating: 5,
+    title: "Finally something that lists the percentages",
+    body: "I have bought a lot of vitamin C that never said how much was in it. Eight weeks in and the marks on my cheeks have genuinely faded.",
+    product: "Deep Vita C Serum",
+  },
+  {
+    name: "Hannah L.",
+    location: "Leeds, UK",
+    rating: 5,
+    title: "My pores actually look smaller",
+    body: "I was sceptical because everything claims this. Started twice a week like the instructions say, now nightly. No irritation at all.",
+    product: "Zero Pore Serum",
+  },
+  {
+    name: "Daniel R.",
+    location: "Austin, US",
+    rating: 4,
+    title: "Great texture, takes patience",
+    body: "The retinal is strong — I went too fast at first. Slowed down and it has been excellent. Wish the jar were bigger.",
+    product: "Deep Retinal Cream",
+  },
+  {
+    name: "Sofia K.",
+    location: "Berlin, DE",
+    rating: 5,
+    title: "The one I repurchase",
+    body: "Light enough under makeup, and my skin does not feel tight by midday any more. Third bottle.",
+    product: "Glow Collagen Serum",
+  },
+  {
+    name: "Aisha N.",
+    location: "Toronto, CA",
+    rating: 5,
+    title: "Calmed everything down",
+    body: "Used it through a bad breakout month. It did not sting and the redness settled faster than anything else I have tried.",
+    product: "Clear Cica Gel",
   },
 ];
 

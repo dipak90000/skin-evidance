@@ -9,7 +9,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import Link from "next/link";
+import CircleButton from "@/components/ui/CircleButton";
 import { HERO_FRAMES, SITE } from "@/lib/site";
 import { gsap } from "@/lib/gsap";
 
@@ -306,21 +306,7 @@ export default function SkincareScrollExperience() {
                 transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="pointer-events-auto mt-8"
               >
-                <Link
-                  href="/collections/all"
-                  className="u-label inline-flex items-center gap-3 bg-white px-8 py-4 text-[11px] text-ink transition-colors hover:bg-accent hover:text-white"
-                >
-                  Shop Now
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    className="h-3.5 w-3.5"
-                  >
-                    <path d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </Link>
+                <CircleButton href="/contact" label="Start now" theme="light" />
               </motion.div>
             </div>
           </div>

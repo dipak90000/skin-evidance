@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import ProductArt from "./ProductArt";
+import ProductImage from "./ProductImage";
 import ProductCard from "./ProductCard";
 import type { Product } from "@/lib/products";
 
@@ -55,12 +55,7 @@ export default function ProductDetail({
               className="grid aspect-square place-items-center"
               style={{ backgroundColor: `${product.tint}14` }}
             >
-              <ProductArt
-                form={product.form}
-                tint={product.tint}
-                sub={active.size}
-                className="h-[78%] w-[78%]"
-              />
+              <ProductImage product={product} className="h-[82%] w-[82%]" />
             </div>
             <div className="mt-3 grid grid-cols-4 gap-3">
               {angles.map((a, i) => (
@@ -68,12 +63,11 @@ export default function ProductDetail({
                   key={i}
                   className="grid aspect-square place-items-center border border-line bg-paper-alt"
                 >
-                  <ProductArt
-                    form={product.form}
-                    tint={product.tint}
-                    label=""
-                    className="h-[70%] w-[70%]"
+                  <ProductImage
                     key={a}
+                    product={product}
+                    showLabel={false}
+                    className="h-[72%] w-[72%]"
                   />
                 </div>
               ))}
@@ -252,6 +246,39 @@ export default function ProductDetail({
           </div>
         </div>
       </section>
+
+
+      {/* Clinical study */}
+      {product.clinical && (
+        <section className="bg-charcoal py-16 text-paper">
+          <div className="u-container">
+            <p className="u-label text-[11px] text-paper/60">Clinical study</p>
+            <h2 className="mt-3 max-w-xl text-[clamp(1.5rem,3vw,2.2rem)] font-light leading-tight tracking-tight">
+              What the panel actually{" "}
+              <span className="font-serif italic">measured</span>
+            </h2>
+
+            <dl className="mt-10 grid gap-8 sm:grid-cols-3">
+              {product.clinical.results.map((r) => (
+                <div key={r.metric} className="border-t border-paper/20 pt-5">
+                  <dt className="text-[13px] text-paper/70">{r.metric}</dt>
+                  <dd className="mt-2 font-serif text-[clamp(2.2rem,5vw,3.4rem)] leading-none">
+                    {r.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <div className="mt-10 flex flex-wrap gap-x-10 gap-y-2 text-[12px] text-paper/60">
+              <p>{product.clinical.panel}</p>
+              <p>{product.clinical.duration}</p>
+            </div>
+            <p className="mt-4 max-w-xl text-[11px] leading-relaxed text-paper/45">
+              {product.clinical.note}
+            </p>
+          </div>
+        </section>
+      )}
 
       {related.length > 0 && (
         <section className="py-16">

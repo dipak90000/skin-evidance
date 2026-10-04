@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ProductArt from "@/components/product/ProductArt";
+import ProductImage from "@/components/product/ProductImage";
 import { COLLECTIONS, productsIn } from "@/lib/products";
 
 /**
@@ -51,14 +51,11 @@ export default function CollectionCards() {
                   style={{ backgroundColor: c.wash }}
                 >
                   {items.map((p, i) => (
-                    <ProductArt
+                    <ProductImage
                       key={p.handle}
-                      form={p.form}
-                      tint={p.tint}
-                      label=""
-                      className={`w-1/3 ${
-                        i === 1 ? "h-44" : "h-36"
-                      } drop-shadow-sm`}
+                      product={p}
+                      showLabel={false}
+                      className={`w-1/3 ${i === 1 ? "h-48" : "h-40"}`}
                     />
                   ))}
                 </div>

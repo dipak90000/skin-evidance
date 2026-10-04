@@ -16,7 +16,7 @@ export const NAV: NavLink[] = [
   { label: "BEST SELLERS", href: "/collections/best-sellers" },
   { label: "FIND YOUR ROUTINE", href: "/pages/routine" },
   { label: "ABOUT US", href: "/pages/about" },
-  { label: "CONTACT US", href: "/pages/contact" },
+  { label: "CONTACT US", href: "/contact" },
 ];
 
 /** Hero frame sequence extracted from the brand animation. */

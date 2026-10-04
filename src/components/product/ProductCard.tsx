@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ProductArt from "./ProductArt";
+import ProductImage from "./ProductImage";
 import type { Product } from "@/lib/products";
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -11,11 +11,9 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.badge}
           </span>
         )}
-        <ProductArt
-          form={product.form}
-          tint={product.tint}
-          sub={product.size}
-          className="h-64 w-full transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105"
+        <ProductImage
+          product={product}
+          className="h-72 w-full p-6 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105"
         />
       </div>
 

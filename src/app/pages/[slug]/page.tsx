@@ -22,15 +22,6 @@ const PAGES: Record<string, Content> = {
       "If you are new to actives, start with one and give it eight weeks before adding another. Most routines fail because too much changed at once.",
     ],
   },
-  contact: {
-    title: "Contact Us",
-    intro: "We answer every message ourselves.",
-    body: [
-      "Customer care: hello@skinevidance.com",
-      "Press and wholesale: press@skinevidance.com",
-      "We reply within two working days. If a product did not work for you, tell us what happened — it is the most useful thing we receive.",
-    ],
-  },
   shipping: {
     title: "Shipping & Returns",
     intro: "Free US shipping on orders over $80.",

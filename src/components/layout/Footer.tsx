@@ -42,7 +42,7 @@ export default function Footer() {
           <ul className="mt-4 space-y-2 text-[13px] text-ink-muted">
             <li><Link href="/pages/about" className="hover:text-ink">About Us</Link></li>
             <li><Link href="/pages/routine" className="hover:text-ink">Find Your Routine</Link></li>
-            <li><Link href="/pages/contact" className="hover:text-ink">Contact Us</Link></li>
+            <li><Link href="/contact" className="hover:text-ink">Contact Us</Link></li>
             <li><Link href="/pages/shipping" className="hover:text-ink">Shipping &amp; Returns</Link></li>
           </ul>
         </div>
