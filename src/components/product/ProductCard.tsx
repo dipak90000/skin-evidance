@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ProductImage from "./ProductImage";
-import type { Product } from "@/lib/products";
+import { formatPrice, type Product } from "@/lib/products";
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
@@ -30,11 +30,11 @@ export default function ProductCard({ product }: { product: Product }) {
 
         <p className="mt-2 flex items-baseline gap-2 text-[15px]">
           <span className={product.compareAt ? "text-sale font-medium" : ""}>
-            ${product.price}
+            {formatPrice(product.price)}
           </span>
           {product.compareAt && (
             <span className="text-[13px] text-ink-faint line-through">
-              ${product.compareAt}
+              {formatPrice(product.compareAt)}
             </span>
           )}
         </p>

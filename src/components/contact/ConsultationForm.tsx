@@ -9,21 +9,6 @@ import { useState } from "react";
  * Design build — submitting shows a confirmation locally. Nothing is sent
  * anywhere until a form endpoint is connected.
  */
-const LAUNCHING = [
-  "Skincare",
-  "Haircare",
-  "Body care",
-  "Makeup and cosmetics",
-  "Other",
-];
-
-const FORMULA_STATUS = [
-  "I need a custom formula developed",
-  "I have a formula to reproduce",
-  "Start from your ready-made",
-  "Not sure yet",
-];
-
 export default function ConsultationForm() {
   const [sent, setSent] = useState(false);
 
@@ -74,73 +59,14 @@ export default function ConsultationForm() {
         />
       </div>
 
-      <div className="grid overflow-hidden rounded-full bg-paper sm:grid-cols-2">
-        <input
-          required
-          name="company"
-          placeholder="COMPANY NAME*"
-          aria-label="Company name"
-          className="u-label border-b border-line bg-transparent px-8 py-5 text-[11px] outline-none placeholder:text-ink/70 focus:bg-paper-alt sm:border-b-0 sm:border-r"
-        />
+      <div className="overflow-hidden rounded-full bg-paper">
         <input
           name="phone"
           placeholder="PHONE NUMBER"
           aria-label="Phone number"
-          className="u-label bg-transparent px-8 py-5 text-[11px] outline-none placeholder:text-ink/70 focus:bg-paper-alt"
+          className="u-label w-full bg-transparent px-8 py-5 text-[11px] outline-none placeholder:text-ink/70 focus:bg-paper-alt"
         />
       </div>
-
-      <fieldset className="rounded-[28px] bg-paper px-8 py-7">
-        <legend className="u-label text-[12px]">What are you launching?</legend>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          {LAUNCHING.map((opt) => (
-            <label
-              key={opt}
-              className="flex cursor-pointer items-center gap-3 text-[14px]"
-            >
-              <input
-                type="radio"
-                name="launching"
-                value={opt}
-                className="peer sr-only"
-              />
-              <span
-                aria-hidden="true"
-                className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-ink/40 transition-colors peer-checked:border-ink peer-focus-visible:ring-2 peer-focus-visible:ring-ink/40"
-              >
-                <span className="h-3 w-3 scale-0 rounded-full bg-ink transition-transform peer-checked:scale-100" />
-              </span>
-              {opt}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <fieldset className="rounded-[28px] bg-paper px-8 py-7">
-        <legend className="u-label text-[12px]">Formula status</legend>
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          {FORMULA_STATUS.map((opt) => (
-            <label
-              key={opt}
-              className="flex cursor-pointer items-center gap-3 text-[14px]"
-            >
-              <input
-                type="radio"
-                name="status"
-                value={opt}
-                className="peer sr-only"
-              />
-              <span
-                aria-hidden="true"
-                className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-ink/40 transition-colors peer-checked:border-ink peer-focus-visible:ring-2 peer-focus-visible:ring-ink/40"
-              >
-                <span className="h-3 w-3 scale-0 rounded-full bg-ink transition-transform peer-checked:scale-100" />
-              </span>
-              {opt}
-            </label>
-          ))}
-        </div>
-      </fieldset>
 
       <div className="rounded-[28px] bg-paper px-8 py-7">
         <label htmlFor="brief" className="u-label text-[12px]">

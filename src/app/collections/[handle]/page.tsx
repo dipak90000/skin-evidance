@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import ProductCard from "@/components/product/ProductCard";
+import SegmentList from "@/components/sections/SegmentList";
 import {
   COLLECTIONS,
   SHOP_ALL,
@@ -73,13 +74,28 @@ export default async function CollectionPage({
 
       <section className="py-12 lg:py-16">
         <div className="u-container">
-          <p className="u-label mb-8 text-[11px] text-ink-muted">
-            {products.length} product{products.length === 1 ? "" : "s"}
-          </p>
+          {products.length > 0 && (
+            <p className="u-label mb-8 text-[11px] text-ink-muted">
+              {products.length} product{products.length === 1 ? "" : "s"}
+            </p>
+          )}
+
+          {collection && collection.segments.length > 0 && (
+            <div className="mb-16">
+              <h2 className="mb-6 text-[clamp(1.2rem,2.6vw,1.8rem)] font-light tracking-tight">
+                Browse <span className="font-serif italic">{title}</span>
+              </h2>
+              <SegmentList
+                segments={collection.segments}
+                tint={collection.tint}
+              />
+            </div>
+          )}
 
           {products.length === 0 ? (
-            <p className="py-16 text-center text-sm text-ink-muted">
-              Nothing in this line yet — it is launching soon.
+            <p className="py-10 text-center text-sm text-ink-muted">
+              No products in this range yet — open a category above to be
+              notified first.
             </p>
           ) : (
             <div className="grid grid-cols-2 gap-x-5 gap-y-12 lg:grid-cols-4">

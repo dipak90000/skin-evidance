@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, EB_Garamond } from "next/font/google";
 import SmoothScroll from "@/components/providers/SmoothScroll";
+import { CartProvider } from "@/components/cart/CartProvider";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -32,10 +33,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <SmoothScroll />
-        <AnnouncementBar />
-        <Header />
-        {children}
-        <Footer />
+        <CartProvider>
+          <AnnouncementBar />
+          <Header />
+          {children}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

@@ -1,4 +1,14 @@
+/** Prices are stored in rupees; this is the only place the format is decided. */
+export const formatPrice = (inr: number) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(inr);
+
 export type ProductForm = "dropper" | "bottle" | "pump" | "tube" | "jar";
+
+export type Segment = { slug: string; title: string };
 
 export type Collection = {
   handle: string;
@@ -8,7 +18,57 @@ export type Collection = {
   /** soft background used on collection cards */
   wash: string;
   blurb: string;
+  /** sub-categories revealed when the category is opened */
+  segments: Segment[];
 };
+
+export const COLLECTIONS: Collection[] = [
+  {
+    handle: "skin-care",
+    title: "Skin Care",
+    concern: "Face & body",
+    tint: "#2f6fae",
+    wash: "#e6eef6",
+    blurb: "Targeted formulas for the concerns people actually come to us with.",
+    segments: [
+      { slug: "anti-acne", title: "Anti-Acne" },
+      { slug: "moisturizers", title: "Moisturizers" },
+      { slug: "sunscreens", title: "Sunscreens" },
+      { slug: "anti-aging", title: "Anti-Aging" },
+      { slug: "depigmenting", title: "Depigmenting" },
+      { slug: "anti-fungal", title: "Anti-Fungal" },
+      { slug: "anti-psoriasis", title: "Topical Anti-Psoriasis" },
+    ],
+  },
+  {
+    handle: "hair-care",
+    title: "Hair Care",
+    concern: "Scalp & strands",
+    tint: "#c4607a",
+    wash: "#f8e9ec",
+    blurb: "Scalp-first formulation, because hair problems usually start there.",
+    segments: [
+      { slug: "anti-dandruff", title: "Anti-Dandruff" },
+      { slug: "hair-fall", title: "Hair Fall Control" },
+      { slug: "scalp-care", title: "Scalp Care" },
+      { slug: "conditioners", title: "Conditioners" },
+    ],
+  },
+  {
+    handle: "baby-care",
+    title: "Baby Care",
+    concern: "Gentle by default",
+    tint: "#A8611C",
+    wash: "#f4ecdf",
+    blurb: "Minimal ingredient lists, fragrance-free, dermatologist tested.",
+    segments: [
+      { slug: "baby-wash", title: "Baby Wash" },
+      { slug: "baby-lotion", title: "Baby Lotion" },
+      { slug: "nappy-care", title: "Nappy Care" },
+      { slug: "baby-sunscreen", title: "Baby Sunscreen" },
+    ],
+  },
+];
 
 export type Product = {
   handle: string;
@@ -25,8 +85,6 @@ export type Product = {
   badge?: "NEW" | "BEST" | "SALE" | "SOON";
   skinType: string;
   concerns: string[];
-  /** kept out of Shop All until the line launches */
-  comingSoon?: boolean;
   description: string;
   keyIngredients: { name: string; role: string }[];
   howToUse: string[];
@@ -40,49 +98,6 @@ export type Product = {
   };
 };
 
-export const COLLECTIONS: Collection[] = [
-  {
-    handle: "zero-line",
-    title: "Zero Line",
-    concern: "Pores & Blackheads",
-    tint: "#2f6fae",
-    wash: "#e6eef6",
-    blurb: "Daily pore refining with gentle acids and clay.",
-  },
-  {
-    handle: "glow-line",
-    title: "Glow Line",
-    concern: "Fine Lines & Wrinkles",
-    tint: "#c4607a",
-    wash: "#f8e9ec",
-    blurb: "Collagen and peptides for bounce and glass glow.",
-  },
-  {
-    handle: "deep-line",
-    title: "Deep Line",
-    concern: "Dark Spots & Dullness",
-    tint: "#A8611C",
-    wash: "#f4ecdf",
-    blurb: "Vitamin C and retinal for tone and clarity.",
-  },
-  {
-    handle: "kojic-acid-line",
-    title: "Kojic Acid Line",
-    concern: "Hyperpigmentation",
-    tint: "#c9a227",
-    wash: "#f7f0d9",
-    blurb: "Kojic acid and niacinamide for even tone.",
-  },
-  {
-    handle: "clear-line",
-    title: "Clear Line",
-    concern: "Acne-prone Skin",
-    tint: "#3f8f7a",
-    wash: "#e4f1ec",
-    blurb: "Calming actives for breakouts and redness.",
-  },
-];
-
 const base = {
   rating: 4.7,
   skinType: "Combination, Dry, Normal, Oily",
@@ -94,13 +109,13 @@ export const PRODUCTS: Product[] = [
     handle: "body-wash",
     name: "Body Wash",
     tagline: "Gentle resurfacing body cleanser",
-    collection: "clear-line",
+    collection: "skin-care",
     form: "bottle",
     tint: "#A8611C",
     size: "300ml",
-    price: 24,
+    price: 1999,
     reviews: 0,
-    badge: "SOON",
+    badge: "BEST",
     concerns: ["Rough Texture", "Body Congestion", "Dryness"],
     description:
       "A low-pH body cleanser that lifts dead surface cells without stripping the barrier. Formulated for the areas that stay rough no matter how much you scrub — upper arms, shoulders, backs of thighs — using acids at a concentration that works but will not leave skin tight.",
@@ -115,8 +130,8 @@ export const PRODUCTS: Product[] = [
       "Follow with SPF on exposed skin the next morning.",
     ],
     variants: [
-      { label: "Single", size: "300ml", price: 24 },
-      { label: "Duo", size: "2 × 300ml", price: 42 },
+      { label: "Single", size: "300ml", price: 1999 },
+      { label: "Duo", size: "2 × 300ml", price: 3499 },
     ],
   },
   {
@@ -124,13 +139,12 @@ export const PRODUCTS: Product[] = [
     handle: "pigmentation-serum",
     name: "Pigmentation Serum",
     tagline: "Targeted corrector for stubborn dark spots",
-    collection: "deep-line",
+    collection: "skin-care",
     form: "dropper",
     tint: "#7a4a16",
     size: "30ml",
-    price: 48,
+    price: 3999,
     reviews: 0,
-    badge: "SOON",
     concerns: ["Dark Spots", "Hyperpigmentation", "Uneven Tone"],
     description:
       "For marks that have not shifted with vitamin C alone. Tranexamic and kojic acid work on pigment through different routes, so the pair reaches discolouration that a single active tends to leave behind. Light enough to layer, concentrated enough to use as a spot treatment.",
@@ -145,8 +159,8 @@ export const PRODUCTS: Product[] = [
       "Daily SPF is essential — without it, pigment returns.",
     ],
     variants: [
-      { label: "Single", size: "30ml", price: 48 },
-      { label: "Value", size: "50ml", price: 68 },
+      { label: "Single", size: "30ml", price: 3999 },
+      { label: "Value", size: "50ml", price: 5699 },
     ],
   },
 ];
@@ -223,6 +237,36 @@ export const REVIEWS: Review[] = [
   },
 ];
 
+export type Upcoming = {
+  name: string;
+  form: ProductForm;
+  note: string;
+  hero?: boolean;
+  /** Later phase of the roadmap, shown but marked. */
+  later?: boolean;
+};
+
+/**
+ * The roadmap. These have no formula sheet yet, so they appear on the rail as
+ * announcements rather than as products with their own pages.
+ */
+export const UPCOMING: Upcoming[] = [
+  { name: "Anti-Acne Range", form: "bottle", note: "Wash, gel & spray" },
+  { name: "Acne Face Wash", form: "bottle", note: "Daily cleanser" },
+  { name: "Spot Gel", form: "dropper", note: "Targeted treatment" },
+  { name: "Oil-Free Gel Moisturiser", form: "bottle", note: "Lightweight hydration" },
+  { name: "Dark Spot Serum", form: "dropper", note: "The hero", hero: true },
+  { name: "Spot-Correcting Night Cream", form: "bottle", note: "Overnight repair" },
+  { name: "Brightening Face Cream", form: "bottle", note: "Daily tone care" },
+  { name: "Anti-Aging Range", form: "dropper", note: "Retinal & peptides" },
+  { name: "Depigmenting Range", form: "dropper", note: "Tone correction" },
+  { name: "Sunscreen SPF 50", form: "bottle", note: "No white cast" },
+  { name: "Anti-Fungal Range", form: "bottle", note: "Topical care" },
+  { name: "Brightening Body Lotion", form: "bottle", note: "Everyday body care" },
+  { name: "Winter Rich Body Butter", form: "bottle", note: "Cold-weather repair", later: true },
+  { name: "Brightening Shower Gel", form: "dropper", note: "In development", later: true },
+];
+
 /**
  * The full range. Both SKUs are pre-launch, so rather than hiding them we
  * surface them everywhere as upcoming — the site's job right now is to build
@@ -232,6 +276,11 @@ export const SHOP_ALL = PRODUCTS;
 
 export const getProduct = (handle: string) =>
   PRODUCTS.find((p) => p.handle === handle);
+
+export const getSegment = (handle: string, slug: string) =>
+  COLLECTIONS.find((c) => c.handle === handle)?.segments.find(
+    (x) => x.slug === slug,
+  );
 
 export const getCollection = (handle: string) =>
   COLLECTIONS.find((c) => c.handle === handle);

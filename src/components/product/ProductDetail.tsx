@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import ProductImage from "./ProductImage";
 import ProductCard from "./ProductCard";
-import type { Product } from "@/lib/products";
+import { useCart } from "@/components/cart/CartProvider";
+import { formatPrice, type Product } from "@/lib/products";
 
 /**
  * Product detail, following the reference PDP: media rail on the left, sticky
@@ -22,13 +23,15 @@ export default function ProductDetail({
 }) {
   const [variant, setVariant] = useState(0);
   const [qty, setQty] = useState(1);
-  const [added, setAdded] = useState(0);
+  const cart = useCart();
   const [tab, setTab] = useState<"ingredients" | "how" | "details">(
     "ingredients",
   );
 
   const active = product.variants[variant];
-  const angles = [0, -8, 8, -4];
+  const inCart =
+    cart.lines.find((l) => l.id === `${product.handle}::${active.label}`)?.qty ??
+    0;
 
   return (
     <main className="flex-1">
@@ -57,21 +60,6 @@ export default function ProductDetail({
             >
               <ProductImage product={product} className="h-[82%] w-[82%]" />
             </div>
-            <div className="mt-3 grid grid-cols-4 gap-3">
-              {angles.map((a, i) => (
-                <div
-                  key={i}
-                  className="grid aspect-square place-items-center border border-line bg-paper-alt"
-                >
-                  <ProductImage
-                    key={a}
-                    product={product}
-                    showLabel={false}
-                    className="h-[72%] w-[72%]"
-                  />
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Buy column */}
@@ -91,11 +79,11 @@ export default function ProductDetail({
 
             <p className="mt-6 flex items-baseline gap-3">
               <span className="text-[26px] font-medium text-sale">
-                ${active.price}
+                {formatPrice(active.price)}
               </span>
               {product.compareAt && variant === 0 && (
                 <span className="text-[16px] text-ink-faint line-through">
-                  ${product.compareAt}
+                  {formatPrice(product.compareAt)}
                 </span>
               )}
             </p>
@@ -122,7 +110,9 @@ export default function ProductDetail({
                     <span className="mt-1 block text-[12px] text-ink-muted">
                       {v.size}
                     </span>
-                    <span className="mt-2 block text-[14px]">${v.price}</span>
+                    <span className="mt-2 block text-[14px]">
+                      {formatPrice(v.price)}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -150,17 +140,17 @@ export default function ProductDetail({
                 </button>
               </div>
               <span className="text-[12px] text-ink-muted">
-                ({added} in cart)
+                ({inCart} in cart)
               </span>
             </div>
 
             <button
               type="button"
-              onClick={() => setAdded((n) => n + qty)}
+              onClick={() => cart.add(product, variant, qty)}
               className="u-label mt-6 flex w-full items-center justify-between bg-ink px-7 py-5 text-[11px] text-white transition-colors hover:bg-accent"
             >
               <span>Add To Cart</span>
-              <span>${active.price * qty}</span>
+              <span>{formatPrice(active.price * qty)}</span>
             </button>
 
             <p className="mt-3 text-center text-[11px] text-ink-faint">

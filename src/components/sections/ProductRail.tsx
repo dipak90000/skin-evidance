@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
-import ProductImage from "@/components/product/ProductImage";
+import BottleArt from "@/components/product/BottleArt";
 import CircleButton from "@/components/ui/CircleButton";
 import { gsap } from "@/lib/gsap";
-import { SHOP_ALL } from "@/lib/products";
+import { UPCOMING } from "@/lib/products";
 
 /**
  * "Upcoming Products" — a rail that travels right to left continuously, on its
@@ -128,37 +127,36 @@ export default function ProductRail() {
               className="flex gap-4 pr-4"
               aria-hidden={s > 0}
             >
-              {SHOP_ALL.map((p) => (
-                <Link
-                  key={`${s}-${p.handle}`}
-                  href={`/products/${p.handle}`}
-                  draggable={false}
-                  tabIndex={s > 0 ? -1 : undefined}
-                  onClick={(e) => {
-                    // A grab that travelled is a drag, not a click.
-                    if (drag.current.moved > 6) e.preventDefault();
-                  }}
-                  className="group block w-[240px] shrink-0 select-none rounded-t-full bg-paper pb-7 pt-10 transition-colors hover:bg-white sm:w-[280px]"
+              {UPCOMING.map((p) => (
+                <div
+                  key={`${s}-${p.name}`}
+                  className="group block w-[240px] shrink-0 select-none rounded-t-full bg-paper pb-7 pt-10 sm:w-[280px]"
                 >
-                  <ProductImage
-                    product={p}
+                  <BottleArt
+                    form={p.form}
+                    name={p.name}
                     className="mx-auto h-60 w-full px-10 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105"
                   />
                   <div className="px-6 pt-5 text-center">
                     <p className="text-[14px] font-medium">{p.name}</p>
                     <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-ink-muted">
-                      Coming soon
+                      {p.hero ? "Hero · Coming soon" : p.later ? "Later this year" : p.note}
                     </p>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           ))}
         </div>
       </div>
 
-      <div className="mt-12 flex justify-center">
-        <CircleButton href="/collections/all" label="View all" />
+      <p className="mx-auto mt-10 max-w-md px-6 text-center text-[13px] leading-relaxed text-ink/60">
+        Ten formulas in development. Sign up and we will tell you the week each
+        one lands.
+      </p>
+
+      <div className="mt-8 flex justify-center">
+        <CircleButton href="/contact" label="Get notified" />
       </div>
     </section>
   );
